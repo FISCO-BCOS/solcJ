@@ -1,12 +1,8 @@
 package org.fisco.solc.compiler;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,18 +10,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class CompilationResult {
 
-    @JsonProperty("contracts")
+    private static final Logger logger = LoggerFactory.getLogger(CompilationResult.class);
+
     private Map<String, ContractMetadata> contracts;
 
-    @JsonProperty("version")
     public String version;
 
-    @JsonIgnore
     public static CompilationResult parse(String rawJson) throws IOException {
+        logger.debug("rawJson: {}", rawJson);
         if (rawJson == null || rawJson.isEmpty()) {
             CompilationResult empty = new CompilationResult();
             empty.contracts = Collections.emptyMap();
@@ -42,7 +39,6 @@ public class CompilationResult {
     }
 
     /** @return the contract's path given this compilation result contains exactly one contract */
-    @JsonIgnore
     public Path getContractPath() {
         if (contracts.size() > 1) {
             throw new UnsupportedOperationException(
@@ -56,7 +52,6 @@ public class CompilationResult {
     }
 
     /** @return the contract's name given this compilation result contains exactly one contract */
-    @JsonIgnore
     public String getContractName() {
         if (contracts.size() > 1) {
             throw new UnsupportedOperationException(
@@ -74,7 +69,6 @@ public class CompilationResult {
      * @return the first contract found for a given contract name; use {@link #getContract(Path,
      *     String)} if this compilation result contains more than one contract with the same name
      */
-    @JsonIgnore
     public ContractMetadata getContract(String contractName) {
         if (contractName == null && contracts.size() == 1) {
             return contracts.values().iterator().next();
@@ -105,24 +99,20 @@ public class CompilationResult {
      * @return the contract with key {@code contractPath:contractName} if it exists; {@code null}
      *     otherwise
      */
-    @JsonIgnore
     public ContractMetadata getContract(Path contractPath, String contractName) {
         return contracts.get(contractPath.toAbsolutePath().toString() + ':' + contractName);
     }
 
     /** @return all contracts from this compilation result */
-    @JsonIgnore
     public List<ContractMetadata> getContracts() {
         return new ArrayList<>(contracts.values());
     }
 
     /** @return all keys from this compilation result */
-    @JsonIgnore
     public List<String> getContractKeys() {
         return new ArrayList<>(contracts.keySet());
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ContractMetadata {
         public String abi;
         public String bin;

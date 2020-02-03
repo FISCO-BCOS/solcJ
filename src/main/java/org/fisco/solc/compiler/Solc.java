@@ -23,8 +23,12 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Scanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Solc {
+
+    private static final Logger logger = LoggerFactory.getLogger(Solc.class);
 
     private File solc = null;
 
@@ -32,12 +36,14 @@ public class Solc {
         try {
             initBundled();
         } catch (IOException e) {
+            logger.debug(" Can't init solc compiler, error: {}, e: {}", e.getMessage(), e);
             throw new RuntimeException("Can't init solc compiler: ", e);
         }
     }
 
     private void initBundled() throws IOException {
         File tmpDir = new File(System.getProperty("user.home"), "solc");
+        logger.debug(" tmpDir: {}", tmpDir.getAbsolutePath());
         tmpDir.mkdirs();
 
         InputStream is = getClass().getResourceAsStream("/native/" + getOS() + "/solc/file.list");
@@ -45,6 +51,7 @@ public class Solc {
             while (scanner.hasNext()) {
                 String s = scanner.next();
                 File targetFile = new File(tmpDir, s);
+                logger.debug(" targetFile: {}", targetFile.getAbsolutePath());
                 InputStream fis =
                         getClass().getResourceAsStream("/native/" + getOS() + "/solc/" + s);
                 Files.copy(fis, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);

@@ -17,6 +17,8 @@
  */
 package org.fisco.solc.compiler;
 
+import static java.util.stream.Collectors.toList;
+
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,13 +30,16 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SolidityCompiler {
 
+    private static final Logger logger = LoggerFactory.getLogger(SolidityCompiler.class);
+
     private Solc solc;
 
+    /** singleton object */
     private static SolidityCompiler INSTANCE;
 
     public SolidityCompiler() {
@@ -428,7 +433,11 @@ public class SolidityCompiler {
 
     public static SolidityCompiler getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new SolidityCompiler();
+            synchronized (SolidityCompiler.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new SolidityCompiler();
+                }
+            }
         }
         return INSTANCE;
     }
