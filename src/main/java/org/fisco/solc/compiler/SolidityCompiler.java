@@ -1,20 +1,3 @@
-/*
- * Copyright (c) [2016] [ <ether.camp> ]
- * This file is part of the ethereumJ library.
- *
- * The ethereumJ library is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * The ethereumJ library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with the ethereumJ library. If not, see <http://www.gnu.org/licenses/>.
- */
 package org.fisco.solc.compiler;
 
 import static java.util.stream.Collectors.toList;
@@ -37,18 +20,38 @@ public class SolidityCompiler {
 
     private static final Logger logger = LoggerFactory.getLogger(SolidityCompiler.class);
 
-    private Solc solc;
-
     /** singleton object */
     private static SolidityCompiler INSTANCE;
+    /** ecdsa compiler */
+    private Solc solc = new Solc(false);
+    /** sm compiler */
+    private Solc sMSolc = new Solc(true);
 
-    public SolidityCompiler() {
-        solc = new Solc();
+    /**
+     * @param sourceDirectory
+     * @param sm
+     * @param combinedJson
+     * @param options
+     * @return
+     * @throws IOException
+     */
+    public static Result compile(
+            File sourceDirectory, boolean sm, boolean combinedJson, Option... options)
+            throws IOException {
+        return getInstance().compileSrc(sourceDirectory, sm, false, combinedJson, options);
     }
 
-    public static Result compile(File sourceDirectory, boolean combinedJson, Option... options)
+    /**
+     * @param source
+     * @param sm
+     * @param combinedJson
+     * @param options
+     * @return
+     * @throws IOException
+     */
+    public static Result compile(byte[] source, boolean sm, boolean combinedJson, Option... options)
             throws IOException {
-        return getInstance().compileSrc(sourceDirectory, false, combinedJson, options);
+        return getInstance().compileSrc(source, sm, false, combinedJson, options);
     }
 
     /**
@@ -278,14 +281,14 @@ public class SolidityCompiler {
         }
     }
 
-    public static Result compile(byte[] source, boolean combinedJson, Option... options)
+    private Result compileSrc(
+            File source, boolean sm, boolean optimize, boolean combinedJson, Option... options)
             throws IOException {
-        return getInstance().compileSrc(source, false, combinedJson, options);
-    }
 
-    public Result compileSrc(File source, boolean optimize, boolean combinedJson, Option... options)
-            throws IOException {
-        List<String> commandParts = prepareCommandOptions(optimize, combinedJson, options);
+        logger.debug(" source: {}, sm: {}", source.getAbsolutePath(), sm);
+
+        Solc tmpSolc = getSolc(sm);
+        List<String> commandParts = prepareCommandOptions(tmpSolc, optimize, combinedJson, options);
 
         commandParts.add(source.getAbsolutePath());
         // new in solidity 0.5.0: using stdin requires an explicit "-". The following output
@@ -296,11 +299,12 @@ public class SolidityCompiler {
         //
         // For older solc version "-" is not an issue as it is accepet as well
         // commandParts.add("-");
+
         ProcessBuilder processBuilder =
-                new ProcessBuilder(commandParts).directory(solc.getExecutable().getParentFile());
+                new ProcessBuilder(commandParts).directory(tmpSolc.getExecutable().getParentFile());
         processBuilder
                 .environment()
-                .put("LD_LIBRARY_PATH", solc.getExecutable().getParentFile().getCanonicalPath());
+                .put("LD_LIBRARY_PATH", tmpSolc.getExecutable().getParentFile().getCanonicalPath());
 
         Process process = processBuilder.start();
 
@@ -321,7 +325,8 @@ public class SolidityCompiler {
     }
 
     private List<String> prepareCommandOptions(
-            boolean optimize, boolean combinedJson, Option... options) throws IOException {
+            Solc solc, boolean optimize, boolean combinedJson, Option... options)
+            throws IOException {
         List<String> commandParts = new ArrayList<>();
         commandParts.add(solc.getExecutable().getCanonicalPath());
         if (optimize) {
@@ -364,16 +369,17 @@ public class SolidityCompiler {
         return Arrays.stream(options).filter(clazz::isInstance).map(clazz::cast).collect(toList());
     }
 
-    public Result compileSrc(
-            byte[] source, boolean optimize, boolean combinedJson, Option... options)
+    private Result compileSrc(
+            byte[] source, boolean sm, boolean optimize, boolean combinedJson, Option... options)
             throws IOException {
-        List<String> commandParts = prepareCommandOptions(optimize, combinedJson, options);
+        Solc tmpSolc = getInstance().getSolc(sm);
+        List<String> commandParts = prepareCommandOptions(tmpSolc, optimize, combinedJson, options);
 
         ProcessBuilder processBuilder =
-                new ProcessBuilder(commandParts).directory(solc.getExecutable().getParentFile());
+                new ProcessBuilder(commandParts).directory(tmpSolc.getExecutable().getParentFile());
         processBuilder
                 .environment()
-                .put("LD_LIBRARY_PATH", solc.getExecutable().getParentFile().getCanonicalPath());
+                .put("LD_LIBRARY_PATH", tmpSolc.getExecutable().getParentFile().getCanonicalPath());
 
         Process process = processBuilder.start();
 
@@ -397,19 +403,18 @@ public class SolidityCompiler {
         return new Result(error.getContent(), output.getContent(), success);
     }
 
-    public static String runGetVersionOutput() throws IOException {
+    public static String runGetVersionOutput(boolean sm) throws IOException {
         List<String> commandParts = new ArrayList<>();
-        commandParts.add(getInstance().solc.getExecutable().getCanonicalPath());
+        Solc tmpSolc = getInstance().getSolc(sm);
+
+        commandParts.add(tmpSolc.getExecutable().getCanonicalPath());
         commandParts.add("--" + Options.VERSION.getName());
 
         ProcessBuilder processBuilder =
-                new ProcessBuilder(commandParts)
-                        .directory(getInstance().solc.getExecutable().getParentFile());
+                new ProcessBuilder(commandParts).directory(tmpSolc.getExecutable().getParentFile());
         processBuilder
                 .environment()
-                .put(
-                        "LD_LIBRARY_PATH",
-                        getInstance().solc.getExecutable().getParentFile().getCanonicalPath());
+                .put("LD_LIBRARY_PATH", tmpSolc.getExecutable().getParentFile().getCanonicalPath());
 
         Process process = processBuilder.start();
 
@@ -429,6 +434,10 @@ public class SolidityCompiler {
         }
 
         throw new RuntimeException("Problem getting solc version: " + error.getContent());
+    }
+
+    private Solc getSolc(boolean sm) {
+        return (sm ? sMSolc : solc);
     }
 
     public static SolidityCompiler getInstance() {
