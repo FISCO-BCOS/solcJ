@@ -26,11 +26,12 @@ public class Solc {
     }
 
     private void initBundled(boolean sm) throws IOException {
-        File tmpDir = new File(System.getProperty("user.home"), "solc");
+    	String alg = fetchAlgorithm(sm);
+        File tmpDir = new File(System.getProperty("user.home"), "solc" + alg);
         logger.debug(" sm: {}, tmpDir: {}", sm, tmpDir.getAbsolutePath());
         tmpDir.mkdirs();
 
-        String solcFileDir = "/native/" + fetchAlgorithm(sm) + "/" + getOS() + "/solc/";
+        String solcFileDir = "/native/" + alg + "/" + getOS() + "/solc/";
         InputStream is = getClass().getResourceAsStream(solcFileDir + "file.list");
         try (Scanner scanner = new Scanner(is)) {
             while (scanner.hasNext()) {
