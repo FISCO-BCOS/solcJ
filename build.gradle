@@ -1,3 +1,15 @@
+// gradle-git deps
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.ajoberstar:gradle-git:1.7.2'
+    }
+}
+
+import org.ajoberstar.grgit.Grgit
+
 plugins {
     id 'java'
     id 'maven'
@@ -8,6 +20,8 @@ plugins {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+[compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
 repositories {
     mavenCentral()
@@ -52,6 +66,32 @@ jar {
     // exclude '**/*.crt'
     // exclude '**/*.key'
 
+    manifest {
+        try {
+            def repo = Grgit.open('.')
+            if (repo != null) {
+                def user = System.getProperty("user.name")
+                def date = new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                def branch = repo.branch.getCurrent().getName()
+                def commit = repo.head().getAbbreviatedId(40)
+
+                attributes(["Built-By"                : user,
+                            "Implementation-Timestamp": date,
+                            "Git-Branch"              : branch,
+                            "Git-Commit"              : commit
+                ])
+
+                logger.info("  Commit : ")
+                logger.info("  => user: {}", user)
+                logger.info("  => date: {}", date)
+                logger.info("  => branch: {}", branch)
+                logger.info("  => commit: {}", commit)
+            }
+        } catch (Exception e) {
+            logger.warn(' .git not exist, cannot found commit info ')
+        }
+    } from sourceSets.main.output
+
     doLast {
         copy {
             from configurations.runtime
@@ -65,14 +105,18 @@ jar {
     }
 }
 
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
+
 // for upload to maven
 task sourcesJar(type: Jar) {
-    classifier = 'sources'
     from sourceSets.main.allSource
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
     from javadoc.destinationDir
 }
 
@@ -85,6 +129,15 @@ artifacts {
 signing {
     required { gradle.taskGraph.hasTask("uploadArchives") }
     sign configurations.archives
+}
+
+// Additional attribute definition
+ext {
+    ossrhUsername="xxx"
+    ossrhPassword="xxx"
+
+    sonatypeUsername="xxx"
+    sonatypePassword="xxx"
 }
 
 uploadArchives {
