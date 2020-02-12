@@ -26,8 +26,8 @@ public class Solc {
     }
 
     private void initBundled(boolean sm) throws IOException {
-    	String alg = fetchAlgorithm(sm);
-        File tmpDir = new File(System.getProperty("user.home"), "solc" + alg);
+        String alg = fetchAlgorithm(sm);
+        File tmpDir = new File(System.getProperty("user.home"), "solc" + "/" + alg);
         logger.debug(" sm: {}, tmpDir: {}", sm, tmpDir.getAbsolutePath());
         tmpDir.mkdirs();
 
