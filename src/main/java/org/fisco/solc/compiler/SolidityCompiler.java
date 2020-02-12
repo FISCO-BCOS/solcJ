@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.fisco.solc.compiler.CompilationResult.ContractMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,17 +29,26 @@ public class SolidityCompiler {
     private Solc sMSolc = new Solc(true);
 
     /**
-     * @param sourceDirectory
+     * @param source
      * @param sm
      * @param combinedJson
      * @param options
      * @return
      * @throws IOException
      */
-    public static Result compile(
-            File sourceDirectory, boolean sm, boolean combinedJson, Option... options)
+    public static Result compile(File source, boolean sm, boolean combinedJson, Option... options)
             throws IOException {
-        return getInstance().compileSrc(sourceDirectory, sm, false, combinedJson, options);
+        Result result = getInstance().compileSrc(source, sm, false, combinedJson, options);
+
+        if (!result.isFailed()) {
+            org.fisco.solc.compiler.CompilationResult compilationResult =
+                    CompilationResult.parse(result.output);
+
+            ContractMetadata contractMetaData =
+                    compilationResult.getContract(compilationResult.getContractName());
+            result.setContractMetaData(contractMetaData);
+        }
+        return result;
     }
 
     /**
@@ -51,7 +61,17 @@ public class SolidityCompiler {
      */
     public static Result compile(byte[] source, boolean sm, boolean combinedJson, Option... options)
             throws IOException {
-        return getInstance().compileSrc(source, sm, false, combinedJson, options);
+        Result result = getInstance().compileSrc(source, sm, false, combinedJson, options);
+
+        if (!result.isFailed()) {
+            org.fisco.solc.compiler.CompilationResult compilationResult =
+                    CompilationResult.parse(result.output);
+
+            ContractMetadata contractMetaData =
+                    compilationResult.getContract(compilationResult.getContractName());
+            result.setContractMetaData(contractMetaData);
+        }
+        return result;
     }
 
     /**
@@ -222,8 +242,10 @@ public class SolidityCompiler {
     }
 
     public static class Result {
-        public String errors;
-        public String output;
+
+        private String errors;
+        private String output;
+        private CompilationResult.ContractMetadata contractMetaData;
         private boolean success;
 
         public Result(String errors, String output, boolean success) {
@@ -234,6 +256,30 @@ public class SolidityCompiler {
 
         public boolean isFailed() {
             return !success;
+        }
+
+        public String getErrors() {
+            return errors;
+        }
+
+        public void setErrors(String errors) {
+            this.errors = errors;
+        }
+
+        public String getOutput() {
+            return output;
+        }
+
+        public void setOutput(String output) {
+            this.output = output;
+        }
+
+        public CompilationResult.ContractMetadata getContractMetaData() {
+            return contractMetaData;
+        }
+
+        public void setContractMetaData(CompilationResult.ContractMetadata contractMetaData) {
+            this.contractMetaData = contractMetaData;
         }
     }
 
@@ -320,6 +366,13 @@ public class SolidityCompiler {
             throw new RuntimeException(e);
         }
         boolean success = process.exitValue() == 0;
+
+        logger.debug(
+                " source file: {}, success: {}, output: {}, error: {} ",
+                source.getAbsoluteFile(),
+                success,
+                output.getContent(),
+                error.getContent());
 
         return new Result(error.getContent(), output.getContent(), success);
     }

@@ -119,6 +119,19 @@ public class CompilationResult {
         public String solInterface;
         public String metadata;
 
+        @Override
+        public String toString() {
+            return "ContractMetadata [abi="
+                    + abi
+                    + ", bin="
+                    + bin
+                    + ", solInterface="
+                    + solInterface
+                    + ", metadata="
+                    + metadata
+                    + "]";
+        }
+
         public String getInterface() {
             return solInterface;
         }
