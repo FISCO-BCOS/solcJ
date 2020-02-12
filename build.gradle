@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'maven'
     id 'idea'
+    id 'signing'
     id 'com.github.sherter.google-java-format' version '0.8'
 }
 
@@ -39,6 +40,8 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.0'
 }
 
+archivesBaseName = 'solcJ'
+group = 'org.fisco-bcos'
 version '1.0-SNAPSHOT'
 
 jar {
@@ -61,3 +64,70 @@ jar {
         }
     }
 }
+
+// for upload to maven
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives jar
+    archives sourcesJar
+    archives javadocJar
+}
+
+signing {
+    required { gradle.taskGraph.hasTask("uploadArchives") }
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
+
+            pom.project {
+                name 'fisco-bcos'
+                packaging 'jar'
+                description 'fisco-bcos solcJ'
+                url 'http://www.fisco-bcos.org'
+
+                scm {
+                    url 'https://github.com/FISCO-BCOS/solcJ.git'
+                    connection 'https://github.com/FISCO-BCOS/solcJ.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'zhangsan'
+                        name 'zhangsan'
+                        email 'zhangsan@gmail.com'
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
