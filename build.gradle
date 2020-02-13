@@ -52,6 +52,14 @@ configurations {
     resultArchives
 }
 
+install {
+    repositories.mavenInstaller {
+        pom.version = "$project.version"
+        pom.artifactId = "solcJ"
+        pom.groupId = "org.fisco-bcos"
+    }
+}
+
 jar {
     destinationDir file('dist/apps')
     archiveName project.name + '-' + project.version + '.jar'
