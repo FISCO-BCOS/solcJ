@@ -48,9 +48,13 @@ archivesBaseName = 'solcJ'
 group = 'org.fisco-bcos'
 version '1.0-SNAPSHOT'
 
+configurations {
+    resultArchives
+}
+
 jar {
     destinationDir file('dist/apps')
-    archiveName project.name + '.jar'
+    archiveName project.name + '-' + project.version + '.jar'
     exclude '**/*.xml'
     exclude '**/*.properties'
     // exclude '**/*.crt'
@@ -103,17 +107,14 @@ tasks.withType(Javadoc) {
 
 // for upload to maven
 task sourcesJar(type: Jar) {
+    classifier = 'sources'
     from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    from javadoc.destinationDir
 }
 
 artifacts {
     archives jar
     archives sourcesJar
-    archives javadocJar
+    resultArchives file: file('dist/apps/' + project.name + '-' + project.version + '.jar')
 }
 
 signing {
@@ -158,13 +159,6 @@ uploadArchives {
                     license {
                         name 'The Apache License, Version 2.0'
                         url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'zhangsan'
-                        name 'zhangsan'
-                        email 'zhangsan@gmail.com'
                     }
                 }
             }
