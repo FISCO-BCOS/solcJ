@@ -13,7 +13,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.fisco.solc.compiler.CompilationResult.ContractMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,17 +37,7 @@ public class SolidityCompiler {
      */
     public static Result compile(File source, boolean sm, boolean combinedJson, Option... options)
             throws IOException {
-        Result result = getInstance().compileSrc(source, sm, false, combinedJson, options);
-
-        if (!result.isFailed()) {
-            org.fisco.solc.compiler.CompilationResult compilationResult =
-                    CompilationResult.parse(result.output);
-
-            ContractMetadata contractMetaData =
-                    compilationResult.getContract(compilationResult.getContractName());
-            result.setContractMetaData(contractMetaData);
-        }
-        return result;
+        return getInstance().compileSrc(source, sm, false, combinedJson, options);
     }
 
     /**
@@ -61,17 +50,7 @@ public class SolidityCompiler {
      */
     public static Result compile(byte[] source, boolean sm, boolean combinedJson, Option... options)
             throws IOException {
-        Result result = getInstance().compileSrc(source, sm, false, combinedJson, options);
-
-        if (!result.isFailed()) {
-            org.fisco.solc.compiler.CompilationResult compilationResult =
-                    CompilationResult.parse(result.output);
-
-            ContractMetadata contractMetaData =
-                    compilationResult.getContract(compilationResult.getContractName());
-            result.setContractMetaData(contractMetaData);
-        }
-        return result;
+        return getInstance().compileSrc(source, sm, false, combinedJson, options);
     }
 
     /**
@@ -245,7 +224,6 @@ public class SolidityCompiler {
 
         private String errors;
         private String output;
-        private CompilationResult.ContractMetadata contractMetaData;
         private boolean success;
 
         public Result(String errors, String output, boolean success) {
@@ -272,14 +250,6 @@ public class SolidityCompiler {
 
         public void setOutput(String output) {
             this.output = output;
-        }
-
-        public CompilationResult.ContractMetadata getContractMetaData() {
-            return contractMetaData;
-        }
-
-        public void setContractMetaData(CompilationResult.ContractMetadata contractMetaData) {
-            this.contractMetaData = contractMetaData;
         }
     }
 
