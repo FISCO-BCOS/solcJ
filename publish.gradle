@@ -13,6 +13,14 @@ targetCompatibility = 1.8
 
 [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
+//configurations.all.resolutionStrategy {
+//    // 版本冲突时直接构建失败
+//    // failOnVersionConflict()
+//
+//    // 缓存有效时间
+//    // cacheChangingModulesFor 0,'seconds'
+//}
+
 repositories {
     // mavenLocal()
     mavenCentral()
@@ -49,8 +57,14 @@ version = '1.0.0-SNAPSHOT'
 
 // Additional attribute definition
 ext {
-    ossrhUsername="xxx"
-    ossrhPassword="xxx"
+    if (!properties.hasProperty("ossrhUsername")) {
+        ossrhUsername="xxx"
+    }
+
+    if (!properties.hasProperty("ossrhPassword")) {
+        ossrhPassword="xxx"
+    }
+
 
     isReleaseVersion = !version.endsWith("SNAPSHOT")
 }
@@ -115,21 +129,21 @@ jar {
     }
 }
 
-javadoc {
-    options.addStringOption('Xdoclint:none', '-quiet')
-    options.addStringOption('encoding', 'UTF-8')
-    options.addStringOption('charSet', 'UTF-8')
-}
+//javadoc {
+//    options.addStringOption('Xdoclint:none', '-quiet')
+//    options.addStringOption('encoding', 'UTF-8')
+//    options.addStringOption('charSet', 'UTF-8')
+//}
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
     archiveClassifier = 'sources'
 }
 
-task javadocJar(type: Jar) {
-    from javadoc
-    archiveClassifier = 'javadoc'
-}
+//task javadocJar(type: Jar) {
+//    from javadoc
+//    archiveClassifier = 'javadoc'
+//}
 
 publishing {
     publications {
@@ -142,7 +156,7 @@ publishing {
             from components.java
 
             artifact sourcesJar
-            artifact javadocJar
+            // artifact javadocJar
 
             pom {
                 name = 'fisco-bcos'
