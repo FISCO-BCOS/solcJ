@@ -182,7 +182,7 @@ publishing {
         maven {
             def releasesRepoURL = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
             def snapshotsRepoURL = "https://oss.sonatype.org/content/repositories/snapshots"
-            url = version.endsWith("SNAPSHOT") ? releasesRepoURL : snapshotsRepoURL
+            url = !version.endsWith("SNAPSHOT") ? releasesRepoURL : snapshotsRepoURL
 
             credentials {
                 username ossrhUsername
