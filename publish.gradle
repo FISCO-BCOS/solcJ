@@ -22,7 +22,7 @@ targetCompatibility = 1.8
 //}
 
 repositories {
-    // mavenLocal()
+    mavenLocal()
     mavenCentral()
 
     maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
@@ -64,9 +64,6 @@ ext {
     if (!properties.hasProperty("ossrhPassword")) {
         ossrhPassword="xxx"
     }
-
-
-    isReleaseVersion = !version.endsWith("SNAPSHOT")
 }
 
 // Test related configuration
@@ -124,8 +121,6 @@ jar {
             from file('src/main/resources/log4j.properties')
             into 'dist/conf'
         }
-
-        new File('dist/conf').mkdirs()
     }
 }
 
@@ -187,7 +182,7 @@ publishing {
         maven {
             def releasesRepoURL = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
             def snapshotsRepoURL = "https://oss.sonatype.org/content/repositories/snapshots"
-            url = isReleaseVersion ? releasesRepoURL : snapshotsRepoURL
+            url = version.endsWith("SNAPSHOT") ? releasesRepoURL : snapshotsRepoURL
 
             credentials {
                 username ossrhUsername
@@ -195,10 +190,9 @@ publishing {
             }
         }
     }
-}
 
-signing {
-    if (isReleaseVersion) {
+    signing {
         sign publishing.publications.mavenJava
     }
 }
+
