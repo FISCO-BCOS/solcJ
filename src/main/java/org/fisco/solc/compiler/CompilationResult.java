@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,9 +16,9 @@ public class CompilationResult {
 
     private static final Logger logger = LoggerFactory.getLogger(CompilationResult.class);
 
-    private Map<String, ContractMetadata> contracts;
+    private Map<String, ContractMetadata> contracts = Collections.emptyMap();
 
-    public String version;
+    public String version = "";
 
     public static CompilationResult parse(String rawJson) throws IOException {
         logger.debug("rawJson: {}", rawJson);
@@ -38,46 +37,13 @@ public class CompilationResult {
         }
     }
 
-    /** @return the contract's path given this compilation result contains exactly one contract */
-    public Path getContractPath() {
-        if (contracts.size() > 1) {
-            throw new UnsupportedOperationException(
-                    "Source contains more than 1 contact. Please specify the contract name. Available keys ("
-                            + getContractKeys()
-                            + ").");
-        } else {
-            String key = contracts.keySet().iterator().next();
-            return Paths.get(key.substring(0, key.lastIndexOf(':')));
-        }
-    }
-
-    /** @return the contract's name given this compilation result contains exactly one contract */
-    public String getContractName() {
-        if (contracts.size() > 1) {
-            throw new UnsupportedOperationException(
-                    "Source contains more than 1 contact. Please specify the contract name. Available keys ("
-                            + getContractKeys()
-                            + ").");
-        } else {
-            String key = contracts.keySet().iterator().next();
-            return key.substring(key.lastIndexOf(':') + 1);
-        }
-    }
-
     /**
      * @param contractName The contract name
      * @return the first contract found for a given contract name; use {@link #getContract(Path,
      *     String)} if this compilation result contains more than one contract with the same name
      */
     public ContractMetadata getContract(String contractName) {
-        if (contractName == null && contracts.size() == 1) {
-            return contracts.values().iterator().next();
-        } else if (contractName == null || contractName.isEmpty()) {
-            throw new UnsupportedOperationException(
-                    "Source contains more than 1 contact. Please specify the contract name. Available keys ("
-                            + getContractKeys()
-                            + ").");
-        }
+
         for (Map.Entry<String, ContractMetadata> entry : contracts.entrySet()) {
             String key = entry.getKey();
             String name = key.substring(key.lastIndexOf(':') + 1);
@@ -116,28 +82,11 @@ public class CompilationResult {
     public static class ContractMetadata {
         public String abi;
         public String bin;
-        public String solInterface;
         public String metadata;
 
         @Override
         public String toString() {
-            return "ContractMetadata [abi="
-                    + abi
-                    + ", bin="
-                    + bin
-                    + ", solInterface="
-                    + solInterface
-                    + ", metadata="
-                    + metadata
-                    + "]";
-        }
-
-        public String getInterface() {
-            return solInterface;
-        }
-
-        public void setInterface(String solInterface) {
-            this.solInterface = solInterface;
+            return "ContractMetadata [abi=" + abi + ", bin=" + bin + ", metadata=" + metadata + "]";
         }
     }
 }
