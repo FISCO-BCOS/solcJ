@@ -26,31 +26,30 @@ public class Solc {
     }
 
     private void initBundled(boolean sm) throws IOException {
-        String alg = fetchAlgorithm(sm);
-        File tmpDir = new File(System.getProperty("user.home"), "solc" + "/" + alg);
+
+        File tmpDir =
+                new File(System.getProperty("user.home"), "solc" + "/" + (sm ? "sm" : "ecdsa"));
         logger.debug(" sm: {}, tmpDir: {}", sm, tmpDir.getAbsolutePath());
         tmpDir.mkdirs();
 
-        String solcFileDir = "/native/" + alg + "/" + getOS() + "/solc/";
-        InputStream is = getClass().getResourceAsStream(solcFileDir + "file.list");
-        try (Scanner scanner = new Scanner(is)) {
-            while (scanner.hasNext()) {
-                String s = scanner.next();
-                File targetFile = new File(tmpDir, s);
-                logger.debug(" targetFile: {}", targetFile.getAbsolutePath());
-                InputStream fis = getClass().getResourceAsStream(solcFileDir + s);
-                Files.copy(fis, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                if (solc == null) {
-                    // first file in the list denotes executable
-                    solc = targetFile;
-                    solc.setExecutable(true);
+        String solcFileDir = "/native/" + (sm ? "sm" : "ecdsa") + "/" + getOS() + "/solc/";
+        try (InputStream is = getClass().getResourceAsStream(solcFileDir + "file.list"); ) {
+            try (Scanner scanner = new Scanner(is)) {
+                while (scanner.hasNext()) {
+                    String s = scanner.next();
+                    File targetFile = new File(tmpDir, s);
+                    logger.debug(" targetFile: {}", targetFile.getAbsolutePath());
+                    try (InputStream fis = getClass().getResourceAsStream(solcFileDir + s); ) {
+                        Files.copy(fis, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        if (solc == null) {
+                            // first file in the list denotes executable
+                            solc = targetFile;
+                            solc.setExecutable(true);
+                        }
+                    }
                 }
             }
         }
-    }
-
-    private String fetchAlgorithm(boolean sm) {
-        return (sm ? "sm" : "ecdsa");
     }
 
     private String getOS() {
