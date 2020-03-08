@@ -57,11 +57,11 @@ version = '1.0.0-SNAPSHOT'
 
 // Additional attribute definition
 ext {
-    if (!properties.hasProperty("ossrhUsername")) {
+    if (!project.hasProperty("ossrhUsername")) {
         ossrhUsername="xxx"
     }
 
-    if (!properties.hasProperty("ossrhPassword")) {
+    if (!project.hasProperty("ossrhPassword")) {
         ossrhPassword="xxx"
     }
 }
