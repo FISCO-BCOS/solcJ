@@ -1,7 +1,9 @@
 plugins {
     id 'java'
     id 'idea'
+    id 'signing'
     id 'java-library'
+    id 'maven-publish'
     id 'org.ajoberstar.grgit' version '4.0.1'
     id 'com.github.sherter.google-java-format' version '0.8'
 }
@@ -20,7 +22,7 @@ targetCompatibility = 1.8
 //}
 
 repositories {
-    // mavenLocal()
+    mavenLocal()
     mavenCentral()
 
     maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
@@ -42,16 +44,27 @@ verifyGoogleJavaFormat {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
+    testCompile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.30'
     testCompile group: 'commons-codec', name: 'commons-codec', version: '1.14'
     
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.29'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.0'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.0'
 }
 
 archivesBaseName = 'solcJ'
 group = 'org.fisco-bcos'
 version = '1.0.0-SNAPSHOT'
+
+// Additional attribute definition
+ext {
+    if (!project.hasProperty("ossrhUsername")) {
+        ossrhUsername="xxx"
+    }
+
+    if (!project.hasProperty("ossrhPassword")) {
+        ossrhPassword="xxx"
+    }
+}
 
 // Test related configuration
 test {
@@ -76,14 +89,12 @@ jar {
                 def branch = repo.branch.getCurrent().getName()
                 def commit = repo.head().getAbbreviatedId(40)
 
-                attributes(["Built-By"                : user,
-                            "Implementation-Timestamp": date,
+                attributes(["Implementation-Timestamp": date,
                             "Git-Branch"              : branch,
                             "Git-Commit"              : commit
                 ])
 
                 logger.info("  Commit : ")
-                logger.info("  => user: {}", user)
                 logger.info("  => date: {}", date)
                 logger.info("  => branch: {}", branch)
                 logger.info("  => commit: {}", commit)
@@ -110,3 +121,76 @@ jar {
         }
     }
 }
+
+//javadoc {
+//    options.addStringOption('Xdoclint:none', '-quiet')
+//    options.addStringOption('encoding', 'UTF-8')
+//    options.addStringOption('charSet', 'UTF-8')
+//}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    archiveClassifier = 'javadoc'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+
+            artifactId project.name
+            groupId project.group
+            version project.version
+
+            from components.java
+
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                name = 'fisco-bcos'
+                description = 'fisco-bcos solcJ'
+                url = 'http://www.fisco-bcos.org'
+
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'zhangsan'
+                        name = 'zhangsan'
+                        email = 'zhangsan@example.com'
+                    }
+                }
+                scm {
+                    connection = 'https://github.com/FISCO-BCOS/solcJ.git'
+                    url = 'https://github.com/FISCO-BCOS/solcJ.git'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            def releasesRepoURL = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            def snapshotsRepoURL = "https://oss.sonatype.org/content/repositories/snapshots"
+            url = !version.endsWith("SNAPSHOT") ? releasesRepoURL : snapshotsRepoURL
+
+            credentials {
+                username ossrhUsername
+                password ossrhPassword
+            }
+        }
+    }
+
+    signing {
+        sign publishing.publications.mavenJava
+    }
+}
+
