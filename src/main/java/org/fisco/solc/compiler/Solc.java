@@ -15,7 +15,7 @@ public class Solc {
 
     private File solc = null;
 
-    Solc(boolean sm) {
+    public Solc(boolean sm) {
         try {
             initBundled(sm);
         } catch (IOException e) {
