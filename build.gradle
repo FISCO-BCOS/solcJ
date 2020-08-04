@@ -84,7 +84,6 @@ jar {
         try {
             def repo = grgit.open()
             if (repo != null) {
-                def user = System.getProperty("user.name")
                 def date = new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
                 def branch = repo.branch.getCurrent().getName()
                 def commit = repo.head().getAbbreviatedId(40)
@@ -100,7 +99,7 @@ jar {
                 logger.info("  => commit: {}", commit)
             }
         } catch (Exception e) {
-            logger.warn(' .git not exist, cannot found commit info')
+            logger.info(' Not a git project ')
         }
     } from sourceSets.main.output
 

@@ -301,7 +301,9 @@ public class SolidityCompiler {
             File source, boolean sm, boolean optimize, boolean combinedJson, Option... options)
             throws IOException {
 
-        logger.debug(" source: {}, sm: {}", source.getAbsolutePath(), sm);
+        if (logger.isDebugEnabled()) {
+            logger.debug(" source: {}, sm: {}", source.getAbsolutePath(), sm);
+        }
 
         Solc tmpSolc = getSolc(sm);
         List<String> commandParts = prepareCommandOptions(tmpSolc, optimize, combinedJson, options);
@@ -337,12 +339,14 @@ public class SolidityCompiler {
         }
         boolean success = process.exitValue() == 0;
 
-        logger.debug(
-                " source file: {}, success: {}, output: {}, error: {} ",
-                source.getAbsoluteFile(),
-                success,
-                output.getContent(),
-                error.getContent());
+        if (logger.isTraceEnabled()) {
+            logger.trace(
+                    " source : {}, success: {}, output: {}, error: {} ",
+                    source.getAbsoluteFile(),
+                    success,
+                    output.getContent(),
+                    error.getContent());
+        }
 
         return new Result(error.getContent(), output.getContent(), success);
     }
@@ -459,7 +463,7 @@ public class SolidityCompiler {
         throw new RuntimeException("Problem getting solc version: " + error.getContent());
     }
 
-    private Solc getSolc(boolean sm) {
+    public Solc getSolc(boolean sm) {
         return (sm ? sMSolc : solc);
     }
 

@@ -19,8 +19,7 @@ public class Solc {
         try {
             initBundled(sm);
         } catch (IOException e) {
-            logger.debug(
-                    " Can't init solc compiler, sm: {}, error: {}, e: {}", sm, e.getMessage(), e);
+            logger.error(" Can't init solc compiler, e: ", e);
             throw new RuntimeException("Can't init solc compiler: ", e);
         }
     }
@@ -28,28 +27,58 @@ public class Solc {
     private void initBundled(boolean sm) throws IOException {
 
         File tmpDir =
-                new File(System.getProperty("user.home"), "solc" + "/" + (sm ? "sm" : "ecdsa"));
-        logger.debug(" sm: {}, tmpDir: {}", sm, tmpDir.getAbsolutePath());
-        tmpDir.mkdirs();
+                new File(
+                        System.getProperty("user.home"),
+                        "fisco/solc" + "/" + (sm ? "sm" : "ecdsa"));
 
-        String solcFileDir = "/native/" + (sm ? "sm" : "ecdsa") + "/" + getOS() + "/solc/";
-        try (InputStream is = getClass().getResourceAsStream(solcFileDir + "file.list"); ) {
+        if (logger.isTraceEnabled()) {
+            logger.trace(" sm: {}, tmpDir: {}", sm, tmpDir.getAbsolutePath());
+        }
+
+        tmpDir.mkdirs();
+        String solcDir = getSolcDir(sm);
+
+        try (InputStream is = getClass().getResourceAsStream(solcDir + "file.list"); ) {
             try (Scanner scanner = new Scanner(is)) {
                 while (scanner.hasNext()) {
                     String s = scanner.next();
                     File targetFile = new File(tmpDir, s);
-                    logger.debug(" targetFile: {}", targetFile.getAbsolutePath());
-                    try (InputStream fis = getClass().getResourceAsStream(solcFileDir + s); ) {
+
+                    try (InputStream fis = getClass().getResourceAsStream(solcDir + s); ) {
                         Files.copy(fis, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                         if (solc == null) {
                             // first file in the list denotes executable
+                            if (logger.isTraceEnabled()) {
+                                logger.trace(
+                                        " source: {}, destination: {}",
+                                        solcDir + s,
+                                        targetFile.getAbsoluteFile());
+                            }
                             solc = targetFile;
                             solc.setExecutable(true);
+                            break;
                         }
                     }
                 }
             }
         }
+    }
+
+    private String getSolcDir(boolean sm) {
+
+        String osName = getOS();
+        String resourceDir = "/native/" + (sm ? "sm/" : "ecdsa/") + getOS() + "/";
+        if (osName.equals("linux")) {
+            // Add support for arm
+            String archName = System.getProperty("os.arch", "");
+            if (archName.contains("arm") || archName.contains("arch")) {
+                resourceDir += "arm/";
+            }
+        }
+
+        resourceDir += "solc/";
+
+        return resourceDir;
     }
 
     private String getOS() {
