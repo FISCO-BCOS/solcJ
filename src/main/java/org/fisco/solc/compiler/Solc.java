@@ -70,8 +70,11 @@ public class Solc {
         String resourceDir = "/native/" + (sm ? "sm/" : "ecdsa/") + getOS() + "/";
         if (osName.equals("linux")) {
             // Add support for arm
-            resourceDir += getArch();
-            resourceDir += "/";
+            String archName = getArch();
+            if (!archName.isEmpty()) {
+                resourceDir += getArch();
+                resourceDir += "/";
+            }
         }
 
         resourceDir += "solc/";
@@ -84,7 +87,9 @@ public class Solc {
         if (archName.contains("aarch64")) {
             return "arm";
         } else {
-            throw new RuntimeException("Can't find solc compiler: unrecognized Arch: " + archName);
+            return "";
+            // throw new RuntimeException("Can't find solc compiler: unrecognized Arch: " +
+            // archName);
         }
     }
 
