@@ -29,7 +29,7 @@ public class Solc {
         File tmpDir =
                 new File(
                         System.getProperty("user.home"),
-                        "fisco/solc" + "/" + (sm ? "sm" : "ecdsa"));
+                        ".fisco/solc" + "/" + Version.version + "/" + (sm ? "sm3" : "keccak256"));
 
         if (logger.isTraceEnabled()) {
             logger.trace(" sm: {}, tmpDir: {}", sm, tmpDir.getAbsolutePath());
