@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -191,6 +192,38 @@ public class SolidityCompiler {
             return name;
         }
     }
+    
+    /**
+     * Provides a way for path remappings.<br>
+     * Example:<br>
+     * <ul>
+     * <li>module1:github.com/ethereum/dapp-bin/=/usr/local/dapp-bin/</li>
+     * <li>module2:github.com/ethereum/dapp-bin/=/usr/local/dapp-bin_old/
+     * source.sol</li>
+     * </li>
+     * </ul>
+     * See https://docs.soliditylang.org/en/v0.7.5/layout-of-source-files.html
+     */
+    public static class RemappingOption implements Option {
+        
+        private final String[] mappings;
+        private final String REMAPPING_NAME = "re-mappings";
+
+        public RemappingOption(String... mappings) {
+            this.mappings = mappings;
+        }
+
+        @Override
+        public String getValue() {
+            return Arrays.stream(mappings).collect(Collectors.joining(" "));
+        }
+
+        @Override
+        public String getName() {
+            return REMAPPING_NAME;
+        }
+    
+    }
 
     public static class CustomOption implements Option {
         private String name;
@@ -355,7 +388,16 @@ public class SolidityCompiler {
             Solc solc, boolean optimize, boolean combinedJson, Option... options)
             throws IOException {
         List<String> commandParts = new ArrayList<>();
+
         commandParts.add(solc.getExecutable().getCanonicalPath());
+        
+        String remappings = getElementsOf(RemappingOption.class, options)
+                .stream().map(Option::getValue).collect(Collectors.joining(" ")).trim();
+        
+        if(!remappings.isEmpty()) {
+            commandParts.add(remappings);
+        }
+        
         if (optimize) {
             commandParts.add("--" + Options.OPTIMIZE.getName());
         }
@@ -380,6 +422,7 @@ public class SolidityCompiler {
                 commandParts.add(option.getValue());
             }
         }
+           
         // new in solidity 0.5.0: using stdin requires an explicit "-". The following output
         // of 'solc' if no file is provided, e.g.,: solc --combined-json abi,bin,interface,metadata
         //
