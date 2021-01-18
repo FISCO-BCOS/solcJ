@@ -23,9 +23,17 @@ public class SolidityCompiler {
     /** singleton object */
     private static SolidityCompiler INSTANCE;
     /** ecdsa compiler */
-    private Solc solc = new Solc(false);
+    private Solc solc = null;
     /** sm compiler */
-    private Solc sMSolc = new Solc(true);
+    private Solc sMSolc = null;
+
+    private void initSolc(boolean sm) {
+        if (sm && (sMSolc == null)) {
+            sMSolc = new Solc(true);
+        } else if (!sm && (solc == null)) {
+            solc = new Solc(false);
+        }
+    }
 
     /**
      * @param source
@@ -464,6 +472,7 @@ public class SolidityCompiler {
     }
 
     public Solc getSolc(boolean sm) {
+        initSolc(sm);
         return (sm ? sMSolc : solc);
     }
 

@@ -17,14 +17,27 @@ public class Solc {
 
     public Solc(boolean sm) {
         try {
-            initBundled(sm);
+            initPropertyBundled();
+            if (solc == null || !solc.exists()) {
+                initDefaultBundled(sm);
+            }
         } catch (IOException e) {
             logger.error(" Can't init solc compiler, e: ", e);
             throw new RuntimeException("Can't init solc compiler: ", e);
         }
     }
 
-    private void initBundled(boolean sm) throws IOException {
+    private void initPropertyBundled() {
+        String property = System.getProperty("solc.path", "");
+        if (!"".equals(property)) {
+            logger.info("initBundled from property, path: {}", property);
+            solc = new File(property);
+            solc.setExecutable(true);
+        }
+        return;
+    }
+
+    private void initDefaultBundled(boolean sm) throws IOException {
 
         File tmpDir =
                 new File(
