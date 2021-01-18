@@ -17,7 +17,7 @@ public class Solc {
 
     public Solc(boolean sm) {
         try {
-            initPropertyBundled();
+            initPropertyBundled(sm);
             if (solc == null || !solc.exists()) {
                 initDefaultBundled(sm);
             }
@@ -27,11 +27,15 @@ public class Solc {
         }
     }
 
-    private void initPropertyBundled() {
-        String property = System.getProperty("solc.path", "");
-        if (!"".equals(property)) {
-            logger.info("initBundled from property, path: {}", property);
-            solc = new File(property);
+    private void initPropertyBundled(boolean sm) {
+        String propertyName = (sm ? "solc.path" : "smsolc.path");
+        String propertyValue = System.getProperty(propertyName, "");
+        if (!"".equals(propertyValue)) {
+            logger.info(
+                    "initBundled from property, propertyName: {}, propertyValue: {}",
+                    propertyName,
+                    propertyValue);
+            solc = new File(propertyValue);
             solc.setExecutable(true);
         }
         return;
