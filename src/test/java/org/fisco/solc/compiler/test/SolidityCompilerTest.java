@@ -2,7 +2,6 @@ package org.fisco.solc.compiler.test;
 
 import static org.fisco.solc.compiler.SolidityCompiler.Options.ABI;
 import static org.fisco.solc.compiler.SolidityCompiler.Options.BIN;
-import static org.fisco.solc.compiler.SolidityCompiler.Options.INTERFACE;
 import static org.fisco.solc.compiler.SolidityCompiler.Options.METADATA;
 import static org.junit.Assert.assertTrue;
 
@@ -24,8 +23,7 @@ public class SolidityCompilerTest {
                             .getClassLoader()
                             .getSystemResource("solidity/CharitySplitterFactory.sol");
             File file = new File(url.getFile());
-            Result result =
-                    SolidityCompiler.compile(file, false, true, ABI, BIN, INTERFACE, METADATA);
+            Result result = SolidityCompiler.compile(file, false, true, ABI, BIN, METADATA);
             assertTrue(
                     "compile solidity failed, solidity error: " + result.getErrors(),
                     !result.isFailed());
@@ -60,8 +58,7 @@ public class SolidityCompilerTest {
                             .getClassLoader()
                             .getSystemResource("solidity/CharitySplitterFactory.sol");
             File file = new File(url.getFile());
-            Result result =
-                    SolidityCompiler.compile(file, true, true, ABI, BIN, INTERFACE, METADATA);
+            Result result = SolidityCompiler.compile(file, true, true, ABI, BIN, METADATA);
             assertTrue(
                     "compile solidity failed, solidity error: " + result.getErrors(),
                     !result.isFailed());

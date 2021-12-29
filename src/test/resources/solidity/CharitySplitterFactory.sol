@@ -1,4 +1,4 @@
-pragma solidity ^0.6.1;
+pragma solidity >0.6.1;
 
 contract CharitySplitter {
     address public owner;

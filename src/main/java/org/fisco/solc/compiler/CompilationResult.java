@@ -3,12 +3,14 @@ package org.fisco.solc.compiler;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +35,29 @@ public class CompilationResult {
             objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
+            com.google.gson.JsonParser parser = new com.google.gson.JsonParser();
+            JsonObject jsonObject = parser.parseString(rawJson).getAsJsonObject();
+
+            if (Integer.parseInt(jsonObject.get("version").toString().split("\\.")[1]) >= 8) {
+                JsonObject result = new JsonObject();
+                JsonObject contractsJObject = jsonObject.get("contracts").getAsJsonObject();
+                Set<String> contractNameList = contractsJObject.keySet();
+                Object[] contractName = contractNameList.toArray();
+                JsonObject contractObject = new JsonObject();
+                for (Object contract : contractName) {
+                    JsonObject contracJsonObject =
+                            contractsJObject.get(contract.toString()).getAsJsonObject();
+                    JsonObject abiObject = new JsonObject();
+                    abiObject.addProperty("abi", contracJsonObject.get("abi").toString());
+                    abiObject.addProperty("bin", contracJsonObject.get("bin").getAsString());
+                    abiObject.addProperty(
+                            "metadata", contracJsonObject.get("metadata").getAsString());
+                    contractObject.add(contract.toString(), abiObject);
+                }
+                result.add("contracts", contractObject);
+                result.addProperty("version", jsonObject.get("version").toString());
+                return objectMapper.readValue(result.toString(), CompilationResult.class);
+            }
             return objectMapper.readValue(rawJson, CompilationResult.class);
         }
     }

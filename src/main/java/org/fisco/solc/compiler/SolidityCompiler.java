@@ -68,7 +68,7 @@ public class SolidityCompiler {
     public static final class Options {
         public static final OutputOption AST = OutputOption.AST;
         public static final OutputOption BIN = OutputOption.BIN;
-        public static final OutputOption INTERFACE = OutputOption.INTERFACE;
+        // public static final OutputOption INTERFACE = OutputOption.INTERFACE;
         public static final OutputOption ABI = OutputOption.ABI;
         public static final OutputOption METADATA = OutputOption.METADATA;
         public static final OutputOption ASTJSON = OutputOption.ASTJSON;
@@ -173,7 +173,7 @@ public class SolidityCompiler {
     private enum OutputOption implements Option {
         AST("ast"),
         BIN("bin"),
-        INTERFACE("interface"),
+        // INTERFACE("interface"),
         ABI("abi"),
         METADATA("metadata"),
         ASTJSON("ast-json");
