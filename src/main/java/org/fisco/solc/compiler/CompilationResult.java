@@ -35,30 +35,25 @@ public class CompilationResult {
             objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-            com.google.gson.JsonParser parser = new com.google.gson.JsonParser();
-            JsonObject jsonObject = parser.parseString(rawJson).getAsJsonObject();
-
-            if (Integer.parseInt(jsonObject.get("version").toString().split("\\.")[1]) >= 8) {
-                JsonObject result = new JsonObject();
-                JsonObject contractsJObject = jsonObject.get("contracts").getAsJsonObject();
-                Set<String> contractNameList = contractsJObject.keySet();
-                Object[] contractName = contractNameList.toArray();
-                JsonObject contractObject = new JsonObject();
-                for (Object contract : contractName) {
-                    JsonObject contracJsonObject =
-                            contractsJObject.get(contract.toString()).getAsJsonObject();
-                    JsonObject abiObject = new JsonObject();
-                    abiObject.addProperty("abi", contracJsonObject.get("abi").toString());
-                    abiObject.addProperty("bin", contracJsonObject.get("bin").getAsString());
-                    abiObject.addProperty(
-                            "metadata", contracJsonObject.get("metadata").getAsString());
-                    contractObject.add(contract.toString(), abiObject);
-                }
-                result.add("contracts", contractObject);
-                result.addProperty("version", jsonObject.get("version").toString());
-                return objectMapper.readValue(result.toString(), CompilationResult.class);
+            JsonObject jsonObject =
+                    new com.google.gson.JsonParser().parseString(rawJson).getAsJsonObject();
+            JsonObject result = new JsonObject();
+            JsonObject contractsJObject = jsonObject.get("contracts").getAsJsonObject();
+            Set<String> contractNameList = contractsJObject.keySet();
+            Object[] contractName = contractNameList.toArray();
+            JsonObject contractObject = new JsonObject();
+            for (Object contract : contractName) {
+                JsonObject contracJsonObject =
+                        contractsJObject.get(contract.toString()).getAsJsonObject();
+                JsonObject abiObject = new JsonObject();
+                abiObject.addProperty("abi", contracJsonObject.get("abi").toString());
+                abiObject.addProperty("bin", contracJsonObject.get("bin").getAsString());
+                abiObject.addProperty("metadata", contracJsonObject.get("metadata").getAsString());
+                contractObject.add(contract.toString(), abiObject);
             }
-            return objectMapper.readValue(rawJson, CompilationResult.class);
+            result.add("contracts", contractObject);
+            result.addProperty("version", jsonObject.get("version").toString());
+            return objectMapper.readValue(result.toString(), CompilationResult.class);
         }
     }
 
