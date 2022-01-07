@@ -1,5 +1,5 @@
 package org.fisco.solc.compiler;
 
 public class Version {
-    public static final String version = "0.6.10";
+    public static final String version = "0.8.11";
 }
