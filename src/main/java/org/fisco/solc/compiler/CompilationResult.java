@@ -52,7 +52,7 @@ public class CompilationResult {
                 contractObject.add(contract.toString(), abiObject);
             }
             result.add("contracts", contractObject);
-            result.addProperty("version", jsonObject.get("version").toString());
+            result.addProperty("version", jsonObject.get("version").getAsString());
             return objectMapper.readValue(result.toString(), CompilationResult.class);
         }
     }
