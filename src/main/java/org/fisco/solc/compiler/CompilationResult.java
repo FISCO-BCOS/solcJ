@@ -36,19 +36,19 @@ public class CompilationResult {
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
             JsonObject jsonObject =
-                    new com.google.gson.JsonParser().parseString(rawJson).getAsJsonObject();
+                    com.google.gson.JsonParser.parseString(rawJson).getAsJsonObject();
             JsonObject result = new JsonObject();
-            JsonObject contractsJObject = jsonObject.get("contracts").getAsJsonObject();
-            Set<String> contractNameList = contractsJObject.keySet();
+            JsonObject asJsonObject = jsonObject.get("contracts").getAsJsonObject();
+            Set<String> contractNameList = asJsonObject.keySet();
             Object[] contractName = contractNameList.toArray();
             JsonObject contractObject = new JsonObject();
             for (Object contract : contractName) {
-                JsonObject contracJsonObject =
-                        contractsJObject.get(contract.toString()).getAsJsonObject();
+                JsonObject contractJsonObject =
+                        asJsonObject.get(contract.toString()).getAsJsonObject();
                 JsonObject abiObject = new JsonObject();
-                abiObject.addProperty("abi", contracJsonObject.get("abi").toString());
-                abiObject.addProperty("bin", contracJsonObject.get("bin").getAsString());
-                abiObject.addProperty("metadata", contracJsonObject.get("metadata").getAsString());
+                abiObject.addProperty("abi", contractJsonObject.get("abi").toString());
+                abiObject.addProperty("bin", contractJsonObject.get("bin").getAsString());
+                abiObject.addProperty("metadata", contractJsonObject.get("metadata").getAsString());
                 contractObject.add(contract.toString(), abiObject);
             }
             result.add("contracts", contractObject);
