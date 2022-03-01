@@ -44,17 +44,17 @@ verifyGoogleJavaFormat {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.30'
+    testCompile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.32'
     testCompile group: 'commons-codec', name: 'commons-codec', version: '1.14'
 
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.0'
-    compile 'com.google.code.gson:gson:2.8.9'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.32'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.1'
+    compile group: 'com.google.code.gson', name:'gson', version:'2.9.0'
 }
 
 archivesBaseName = 'solcJ'
 group = 'org.fisco-bcos'
-version = '0.6.10.2-SNAPSHOT'
+version = '0.8.11.0-SNAPSHOT'
 
 // Additional attribute definition
 ext {
