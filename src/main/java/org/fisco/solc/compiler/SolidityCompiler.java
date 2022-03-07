@@ -45,7 +45,7 @@ public class SolidityCompiler {
      */
     public static Result compile(File source, boolean sm, boolean combinedJson, Option... options)
             throws IOException {
-        return getInstance().compileSrc(source, sm, false, combinedJson, options);
+        return getInstance().compileSrc(source, sm, true, combinedJson, options);
     }
 
     /**
