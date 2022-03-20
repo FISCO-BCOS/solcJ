@@ -81,7 +81,7 @@ public class Solc {
 
         String osName = getOS();
         String resourceDir = "/native/" + (sm ? "sm/" : "ecdsa/") + getOS() + "/";
-        if (osName.equals("linux")) {
+        if (osName.equals("linux") || osName.equals("mac")) {
             // Add support for arm
             String archName = getArch();
             if (!archName.isEmpty()) {
