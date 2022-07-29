@@ -48,13 +48,13 @@ dependencies {
     testCompile group: 'commons-codec', name: 'commons-codec', version: '1.14'
 
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.32'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.1'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.2'
     compile group: 'com.google.code.gson', name:'gson', version:'2.9.0'
 }
 
 archivesBaseName = 'solcJ'
 group = 'org.fisco-bcos'
-version = '0.8.11.0'
+version = '0.8.11.1-SNAPSHOT'
 
 // Additional attribute definition
 ext {
