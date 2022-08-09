@@ -5,7 +5,7 @@ plugins {
 group 'org.fisco-bcos'
 
 archivesBaseName = 'solcJ'
-version = '0.4.25.1-SNAPSHOT'
+version = '0.4.25.1-DEBUG-SNAPSHOT'
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
@@ -21,7 +21,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
 
-            artifactId project.name
+            artifactId 'solcJ'
             groupId project.group
             version project.version
 

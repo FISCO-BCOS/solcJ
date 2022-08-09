@@ -12,3 +12,6 @@ dist
 bin
 out
 log**
+
+gradle.properties
+gpg.gpg
