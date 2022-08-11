@@ -5,7 +5,7 @@ plugins {
 group 'org.fisco-bcos'
 
 archivesBaseName = 'solcJ'
-version = '0.8.11.1-DEBUG-SNAPSHOT'
+version = '0.8.11.1-SNAPSHOT'
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
