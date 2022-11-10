@@ -49,7 +49,7 @@ subprojects {
         resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
     }
 
-    sourceSets{
+    sourceSets {
         main {
             java {
                 srcDir "src/main/java"
@@ -70,8 +70,10 @@ subprojects {
 
     dependencies {
         compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.32'
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.2'
-        compile group: 'com.google.code.gson', name:'gson', version:'2.9.0'
+        compile(group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.14.0') {
+            force true
+        }
+        compile group: 'com.google.code.gson', name: 'gson', version: '2.9.0'
 
         testImplementation group: 'junit', name: 'junit', version: '4.12'
         testImplementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.32'
@@ -129,11 +131,11 @@ subprojects {
 // Additional attribute definition
 ext {
     if (!project.hasProperty("ossrhUsername")) {
-        ossrhUsername="xxx"
+        ossrhUsername = "xxx"
     }
 
     if (!project.hasProperty("ossrhPassword")) {
-        ossrhPassword="xxx"
+        ossrhPassword = "xxx"
     }
 }
 
@@ -141,7 +143,7 @@ ext {
 test {
     testLogging {
         // showStandardStreams = true
-        events "started","passed","skipped","failed"
+        events "started", "passed", "skipped", "failed"
     }
 }
 
