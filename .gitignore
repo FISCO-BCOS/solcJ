@@ -11,3 +11,10 @@ build
 dist
 bin
 out
+gpg.gpg
+gradle.properties
+log4j.properties
+log**
+
+## macOS
+.DS_Store
