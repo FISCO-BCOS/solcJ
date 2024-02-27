@@ -45,7 +45,7 @@ public class SolidityCompiler {
      */
     public static Result compile(File source, boolean sm, boolean combinedJson, Option... options)
             throws IOException {
-        return getInstance().compileSrc(source, sm, true, combinedJson, options);
+        return getInstance().compileSrc(source, sm, false, combinedJson, options);
     }
 
     /**
@@ -385,6 +385,9 @@ public class SolidityCompiler {
             if (option.getValue() != null) {
                 commandParts.add(option.getValue());
             }
+        }
+        for (Option option : getElementsOf(NameOnlyOption.class, options)) {
+            commandParts.add("--" + option.getName());
         }
         // new in solidity 0.5.0: using stdin requires an explicit "-". The following output
         // of 'solc' if no file is provided, e.g.,: solc --combined-json abi,bin,interface,metadata

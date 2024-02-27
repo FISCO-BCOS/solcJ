@@ -15,3 +15,7 @@ log**
 
 gradle.properties
 gpg.gpg
+log4j.properties
+
+## macOS
+.DS_Store
