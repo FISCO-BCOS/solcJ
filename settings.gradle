@@ -1,9 +1,1 @@
 rootProject.name = 'solcJ'
-include 'solc-0.8.11'
-include 'solc-0.4.25'
-include 'solc-0.5.2'
-include 'solc-0.6.10'
-include 'solc-mac-all'
-include 'solc-win-all'
-include 'solc-linux-all'
-
