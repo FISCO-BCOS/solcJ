@@ -76,6 +76,8 @@ public class SolidityCompiler {
         public static final OutputOption ABI = OutputOption.ABI;
         public static final OutputOption METADATA = OutputOption.METADATA;
         public static final OutputOption ASTJSON = OutputOption.ASTJSON;
+        public static final OutputOption USERDOC = OutputOption.USERDOC;
+        public static final OutputOption DEVDOC = OutputOption.DEVDOC;
 
         private static final NameOnlyOption OPTIMIZE = NameOnlyOption.OPTIMIZE;
         private static final NameOnlyOption VERSION = NameOnlyOption.VERSION;
@@ -179,7 +181,10 @@ public class SolidityCompiler {
         BIN("bin"),
         ABI("abi"),
         METADATA("metadata"),
-        ASTJSON("ast-json");
+        ASTJSON("ast-json"),
+        USERDOC("userdoc"),
+        DEVDOC("devdoc");
+
 
         private String name;
 

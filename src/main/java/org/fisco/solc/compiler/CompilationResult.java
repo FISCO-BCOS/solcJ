@@ -49,6 +49,14 @@ public class CompilationResult {
                 abiObject.addProperty("abi", contractJsonObject.get("abi").toString());
                 abiObject.addProperty("bin", contractJsonObject.get("bin").getAsString());
                 abiObject.addProperty("metadata", contractJsonObject.get("metadata").getAsString());
+
+                if ( contractJsonObject.get("userdoc") != null) {
+                    abiObject.addProperty("userdoc", contractJsonObject.get("userdoc").toString());
+                }
+
+                if (contractJsonObject.get("devdoc") != null) {
+                    abiObject.addProperty("devdoc", contractJsonObject.get("devdoc").toString());
+                }
                 contractObject.add(contract.toString(), abiObject);
             }
             result.add("contracts", contractObject);
@@ -103,10 +111,12 @@ public class CompilationResult {
         public String abi;
         public String bin;
         public String metadata;
+        public String userdoc;
+        public String devdoc;
 
         @Override
         public String toString() {
-            return "ContractMetadata [abi=" + abi + ", bin=" + bin + ", metadata=" + metadata + "]";
+            return "ContractMetadata [abi=" + abi + ", bin=" + bin + ", metadata=" + metadata + ", userdoc=" + userdoc + ", devdoc=" + devdoc + "]";
         }
     }
 }
