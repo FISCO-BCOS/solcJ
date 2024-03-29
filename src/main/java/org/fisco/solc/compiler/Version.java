@@ -7,6 +7,7 @@ public enum Version {
     V0_8_11("0.8.11");
 
     private String version;
+
     Version(String version) {
         this.version = version;
     }

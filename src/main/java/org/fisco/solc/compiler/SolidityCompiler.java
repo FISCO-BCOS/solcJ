@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +47,8 @@ public class SolidityCompiler {
      * @return
      * @throws IOException
      */
-    public static Result compile(File source, boolean sm, boolean combinedJson, Version version, Option... options)
+    public static Result compile(
+            File source, boolean sm, boolean combinedJson, Version version, Option... options)
             throws IOException {
         return getInstance().compileSrc(source, sm, false, combinedJson, version, options);
     }
@@ -61,7 +61,8 @@ public class SolidityCompiler {
      * @return
      * @throws IOException
      */
-    public static Result compile(byte[] source, boolean sm, boolean combinedJson, Version version, Option... options)
+    public static Result compile(
+            byte[] source, boolean sm, boolean combinedJson, Version version, Option... options)
             throws IOException {
         return getInstance().compileSrc(source, sm, false, combinedJson, version, options);
     }
@@ -184,7 +185,6 @@ public class SolidityCompiler {
         ASTJSON("ast-json"),
         USERDOC("userdoc"),
         DEVDOC("devdoc");
-
 
         private String name;
 
@@ -314,7 +314,12 @@ public class SolidityCompiler {
     }
 
     private Result compileSrc(
-            File source, boolean sm, boolean optimize, boolean combinedJson, Version version, Option... options)
+            File source,
+            boolean sm,
+            boolean optimize,
+            boolean combinedJson,
+            Version version,
+            Option... options)
             throws IOException {
 
         if (logger.isDebugEnabled()) {
@@ -400,7 +405,12 @@ public class SolidityCompiler {
     }
 
     private Result compileSrc(
-            byte[] source, boolean sm, boolean optimize, boolean combinedJson, Version version,  Option... options)
+            byte[] source,
+            boolean sm,
+            boolean optimize,
+            boolean combinedJson,
+            Version version,
+            Option... options)
             throws IOException {
         Solc tmpSolc = getInstance().getSolc(sm, version);
         List<String> commandParts = prepareCommandOptions(tmpSolc, optimize, combinedJson, options);

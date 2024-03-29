@@ -50,7 +50,7 @@ public class CompilationResult {
                 abiObject.addProperty("bin", contractJsonObject.get("bin").getAsString());
                 abiObject.addProperty("metadata", contractJsonObject.get("metadata").getAsString());
 
-                if ( contractJsonObject.get("userdoc") != null) {
+                if (contractJsonObject.get("userdoc") != null) {
                     abiObject.addProperty("userdoc", contractJsonObject.get("userdoc").toString());
                 }
 
@@ -116,7 +116,17 @@ public class CompilationResult {
 
         @Override
         public String toString() {
-            return "ContractMetadata [abi=" + abi + ", bin=" + bin + ", metadata=" + metadata + ", userdoc=" + userdoc + ", devdoc=" + devdoc + "]";
+            return "ContractMetadata [abi="
+                    + abi
+                    + ", bin="
+                    + bin
+                    + ", metadata="
+                    + metadata
+                    + ", userdoc="
+                    + userdoc
+                    + ", devdoc="
+                    + devdoc
+                    + "]";
         }
     }
 }

@@ -1,22 +1,21 @@
 package org.fisco.solc.compiler.test;
 
-import org.fisco.solc.compiler.CompilationResult;
-import org.fisco.solc.compiler.SolidityCompiler;
-import org.fisco.solc.compiler.SolidityCompiler.Result;
-import org.fisco.solc.compiler.Version;
-import org.junit.Test;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Files;
-
 import static org.fisco.solc.compiler.SolidityCompiler.Options.ABI;
 import static org.fisco.solc.compiler.SolidityCompiler.Options.BIN;
 import static org.fisco.solc.compiler.SolidityCompiler.Options.DEVDOC;
 import static org.fisco.solc.compiler.SolidityCompiler.Options.METADATA;
 import static org.fisco.solc.compiler.SolidityCompiler.Options.USERDOC;
 import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import org.fisco.solc.compiler.CompilationResult;
+import org.fisco.solc.compiler.SolidityCompiler;
+import org.fisco.solc.compiler.SolidityCompiler.Result;
+import org.fisco.solc.compiler.Version;
+import org.junit.Test;
 
 public class SolidityCompilerV0425_0610Test {
     @SuppressWarnings("static-access")
@@ -55,7 +54,8 @@ public class SolidityCompilerV0425_0610Test {
                             .getSystemResource("solidity/Asset.sol");
             File file = new File(url.getFile());
             Result result =
-//                    SolidityCompiler.compile(file, false, true, ABI, BIN, INTERFACE, METADATA);
+                    //                    SolidityCompiler.compile(file, false, true, ABI, BIN,
+                    // INTERFACE, METADATA);
                     SolidityCompiler.compile(file, sm, true, version, ABI, BIN, METADATA);
             assertTrue(
                     "compile solidity failed, solidity error: " + result.getErrors(),
@@ -83,8 +83,10 @@ public class SolidityCompilerV0425_0610Test {
             File file = new File(url.getFile());
             byte[] bytes = Files.readAllBytes(file.toPath());
             Result result =
-//                    SolidityCompiler.compile(file, false, true, ABI, BIN, INTERFACE, METADATA);
-                    SolidityCompiler.compile(bytes, sm, true, version, ABI, BIN, METADATA, USERDOC, DEVDOC);
+                    //                    SolidityCompiler.compile(file, false, true, ABI, BIN,
+                    // INTERFACE, METADATA);
+                    SolidityCompiler.compile(
+                            bytes, sm, true, version, ABI, BIN, METADATA, USERDOC, DEVDOC);
             assertTrue(
                     "compile solidity failed, solidity error: " + result.getErrors(),
                     !result.isFailed());
@@ -110,7 +112,8 @@ public class SolidityCompilerV0425_0610Test {
                             .getSystemResource("solidity/Points.sol");
             File file = new File(url.getFile());
             Result result =
-                    SolidityCompiler.compile(file, true, true, version, ABI, BIN, METADATA, USERDOC, DEVDOC);
+                    SolidityCompiler.compile(
+                            file, true, true, version, ABI, BIN, METADATA, USERDOC, DEVDOC);
             assertTrue(
                     "compile solidity failed, solidity error: " + result.getErrors(),
                     !result.isFailed());

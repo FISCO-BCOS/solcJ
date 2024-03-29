@@ -46,7 +46,11 @@ public class Solc {
         File tmpDir =
                 new File(
                         System.getProperty("user.home"),
-                        ".fisco/solc" + "/" + version.toString() + "/" + (sm ? "sm3" : "keccak256"));
+                        ".fisco/solc"
+                                + "/"
+                                + version.toString()
+                                + "/"
+                                + (sm ? "sm3" : "keccak256"));
 
         if (logger.isTraceEnabled()) {
             logger.trace(" sm: {}, tmpDir: {}", sm, tmpDir.getAbsolutePath());
@@ -84,7 +88,13 @@ public class Solc {
     private String getSolcDir(boolean sm, Version version) {
 
         String osName = getOS();
-        String resourceDir = "/native/" + (sm ? "sm/" : "ecdsa/") +  getOS() + File.separator + version.toString() + File.separator;
+        String resourceDir =
+                "/native/"
+                        + (sm ? "sm/" : "ecdsa/")
+                        + getOS()
+                        + File.separator
+                        + version.toString()
+                        + File.separator;
         if (osName.equals("linux") || osName.equals("mac")) {
             // Add support for arm
             String archName = getArch();

@@ -7,7 +7,6 @@ import org.junit.Test;
 
 public class SolidityCompilerVersionTest {
     @SuppressWarnings("static-access")
-
     @Test
     public void smSolcVersionTest() throws Exception {
         String versionOutput = SolidityCompiler.runGetVersionOutput(true, Version.V0_8_11);
