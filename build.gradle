@@ -66,10 +66,16 @@ ext {
         ossrhPassword="xxx"
     }
 
-    repo = grgit.open()
     date = new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-    branch = repo.branch.getCurrent().getName()
-    commit = repo.head().getAbbreviatedId(40)
+    branch = "none"
+    commit = "none"
+    try {
+        repo = grgit.open()
+        branch = repo.branch.getCurrent().getName()
+        commit = repo.head().getAbbreviatedId(40)
+    } catch (Exception e) {
+        logger.info(' Not a git project ')
+    }
 }
 
 // Test related configuration
