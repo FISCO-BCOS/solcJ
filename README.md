@@ -15,8 +15,6 @@
 - 0.4.25
 - 0.5.2
 - 0.6.10
-- 0.8.11
-- 0.8.26
 
 ## 使用
 
@@ -30,12 +28,6 @@
 
     # 0.6.10 版本
     compile group: 'org.fisco-bcos', name: 'solcJ', version: '0.6.10.0'
-  
-    # 0.8.11 版本
-    compile group: 'org.fisco-bcos', name: 'solcJ', version: '0.8.11.0'
-  
-    # 0.8.26 版本
-    compile group  'org.fisco-bcos', name: 'solcJ', version: '0.8.26.0'
     ```
 
 - `Maven`
@@ -60,20 +52,7 @@
         <artifactId>solcJ</artifactId>
         <version>0.6.10.0</version>
     </dependency>
-  
-    #0.8.11 版本
-    <dependency>
-        <groupId>org.fisco-bcos</groupId>
-        <artifactId>solcJ</artifactId>
-        <version>0.8.11.0</version>
-    </dependency>
-    
-    #0.8.26 版本
-    <dependency>
-        <groupId>org.fisco-bcos</groupId>
-        <artifactId>solcJ</artifactId>
-        <version>0.8.26.0</version>
-    </dependency>
+
   ```
   
 ## 接口

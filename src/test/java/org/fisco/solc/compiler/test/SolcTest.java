@@ -28,16 +28,10 @@ public class SolcTest {
         Assert.assertNotNull(solc);
         Assert.assertTrue(solc.getExecutable().exists());
         Assert.assertTrue(solc.getExecutable().canExecute());
-
-        solc = new Solc(true, Version.V0_8_26);
-        Assert.assertNotNull(solc);
-        Assert.assertTrue(solc.getExecutable().exists());
-        Assert.assertTrue(solc.getExecutable().canExecute());
     }
 
     @Test
     public void ecdsaSolcTest() {
-
         Solc solc = new Solc(false, Version.V0_4_25);
         Assert.assertNotNull(solc);
         Assert.assertTrue(solc.getExecutable().exists());
@@ -54,11 +48,6 @@ public class SolcTest {
         Assert.assertTrue(solc.getExecutable().canExecute());
 
         solc = new Solc(false, Version.V0_8_11);
-        Assert.assertNotNull(solc);
-        Assert.assertTrue(solc.getExecutable().exists());
-        Assert.assertTrue(solc.getExecutable().canExecute());
-
-        solc = new Solc(false, Version.V0_8_26);
         Assert.assertNotNull(solc);
         Assert.assertTrue(solc.getExecutable().exists());
         Assert.assertTrue(solc.getExecutable().canExecute());

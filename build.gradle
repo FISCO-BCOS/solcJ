@@ -87,7 +87,7 @@ test {
 }
 
 jar {
-     dependsOn(['jarAll', 'jar0425', 'jar052', 'jar0610', 'jar0811', 'jar0826', 'jarLinux', 'jarMac', 'jarWin'])
+     dependsOn(['jarAll', 'jar0425', 'jar052', 'jar0610', 'jar0811', 'jarLinux', 'jarMac', 'jarWin'])
 }
 
 task jarAll(type: Jar) {
@@ -95,7 +95,7 @@ task jarAll(type: Jar) {
         attributes(["Implementation-Timestamp": date,
                     "Git-Branch"              : branch,
                     "Git-Commit"              : commit,
-                    "Solidity-Version"        : "0.4.25, 0.5.2, 0.6.10, 0.8.11, 0.8.26",
+                    "Solidity-Version"        : "0.4.25, 0.5.2, 0.6.10, 0.8.11",
                     "Crypto"                  : "ecdsa, sm",
                     "OS-Name"                 : "linux, mac, win",
                     "OS-Arch"                 : "x86, arm",
@@ -122,11 +122,9 @@ task jar0425(type: Jar) {
     exclude "native/ecdsa/linux/0.5.2", "native/ecdsa/mac/0.5.2", "native/ecdsa/win/0.5.2"
     exclude "native/ecdsa/linux/0.6.10", "native/ecdsa/mac/0.6.10", "native/ecdsa/win/0.6.10"
     exclude "native/ecdsa/linux/0.8.11", "native/ecdsa/mac/0.8.11", "native/ecdsa/win/0.8.11"
-    exclude "native/ecdsa/linux/0.8.26", "native/ecdsa/mac/0.8.26", "native/ecdsa/win/0.8.26"
     exclude "native/sm/linux/0.5.2", "native/sm/mac/0.5.2", "native/sm/win/0.5.2"
     exclude "native/sm/linux/0.6.10", "native/sm/mac/0.6.10", "native/sm/win/0.6.10"
     exclude "native/sm/linux/0.8.11", "native/sm/mac/0.8.11", "native/sm/win/0.8.11"
-    exclude "native/sm/linux/0.8.26", "native/sm/mac/0.8.26", "native/sm/win/0.8.26"
 
     archiveFileName = project.name + '-0.4.25-' + project.version + '.jar';
 }
@@ -147,11 +145,9 @@ task jar052(type: Jar) {
     exclude "native/ecdsa/linux/0.4.25", "native/ecdsa/mac/0.4.25", "native/ecdsa/win/0.4.25"
     exclude "native/ecdsa/linux/0.6.10", "native/ecdsa/mac/0.6.10", "native/ecdsa/win/0.6.10"
     exclude "native/ecdsa/linux/0.8.11", "native/ecdsa/mac/0.8.11", "native/ecdsa/win/0.8.11"
-    exclude "native/ecdsa/linux/0.8.26", "native/ecdsa/mac/0.8.26", "native/ecdsa/win/0.8.26"
     exclude "native/sm/linux/0.4.25", "native/sm/mac/0.4.25", "native/sm/win/0.4.25"
     exclude "native/sm/linux/0.6.10", "native/sm/mac/0.6.10", "native/sm/win/0.6.10"
     exclude "native/sm/linux/0.8.11", "native/sm/mac/0.8.11", "native/sm/win/0.8.11"
-    exclude "native/sm/linux/0.8.26", "native/sm/mac/0.8.26", "native/sm/win/0.8.26"
 
     archiveFileName = project.name + '-0.5.2-' + project.version + '.jar';
 }
@@ -172,11 +168,9 @@ task jar0610(type: Jar) {
     exclude "native/ecdsa/linux/0.4.25", "native/ecdsa/mac/0.4.25", "native/ecdsa/win/0.4.25"
     exclude "native/ecdsa/linux/0.5.2", "native/ecdsa/mac/0.5.2", "native/ecdsa/win/0.5.2"
     exclude "native/ecdsa/linux/0.8.11", "native/ecdsa/mac/0.8.11", "native/ecdsa/win/0.8.11"
-    exclude "native/ecdsa/linux/0.8.26", "native/ecdsa/mac/0.8.26", "native/ecdsa/win/0.8.26"
     exclude "native/sm/linux/0.4.25", "native/sm/mac/0.4.25", "native/sm/win/0.4.25"
     exclude "native/sm/linux/0.5.2", "native/sm/mac/0.5.2", "native/sm/win/0.5.2"
     exclude "native/sm/linux/0.8.11", "native/sm/mac/0.8.11", "native/sm/win/0.8.11"
-    exclude "native/sm/linux/0.8.26", "native/sm/mac/0.8.26", "native/sm/win/0.8.26"
 
     archiveFileName = project.name + '-0.6.10-' + project.version + '.jar';
 }
@@ -197,38 +191,11 @@ task jar0811(type: Jar) {
     exclude "native/ecdsa/linux/0.4.25", "native/ecdsa/mac/0.4.25", "native/ecdsa/win/0.4.25"
     exclude "native/ecdsa/linux/0.5.2", "native/ecdsa/mac/0.5.2", "native/ecdsa/win/0.5.2"
     exclude "native/ecdsa/linux/0.6.10", "native/ecdsa/mac/0.6.10", "native/ecdsa/win/0.6.10"
-    exclude "native/ecdsa/linux/0.8.26", "native/ecdsa/mac/0.8.26", "native/ecdsa/win/0.8.26"
     exclude "native/sm/linux/0.4.25", "native/sm/mac/0.4.25", "native/sm/win/0.4.25"
     exclude "native/sm/linux/0.5.2", "native/sm/mac/0.5.2", "native/sm/win/0.5.2"
     exclude "native/sm/linux/0.6.10", "native/sm/mac/0.6.10", "native/sm/win/0.6.10"
-    exclude "native/sm/linux/0.8.26", "native/sm/mac/0.8.26", "native/sm/win/0.8.26"
 
     archiveFileName = project.name + '-0.8.11-' + project.version + '.jar';
-}
-
-task jar0826(type: Jar) {
-    manifest {
-        attributes(["Implementation-Timestamp": date,
-                    "Git-Branch"              : branch,
-                    "Git-Commit"              : commit,
-                    "Solidity-Version"        : "0.8.26",
-                    "Crypto"                  : "ecdsa, sm",
-                    "OS-Name"                 : "linux, mac, win",
-                    "OS-Arch"                 : "x86, arm",
-        ])
-    }
-
-    from sourceSets.main.output
-    exclude "native/ecdsa/linux/0.4.25", "native/ecdsa/mac/0.4.25", "native/ecdsa/win/0.4.25"
-    exclude "native/ecdsa/linux/0.5.2", "native/ecdsa/mac/0.5.2", "native/ecdsa/win/0.5.2"
-    exclude "native/ecdsa/linux/0.6.10", "native/ecdsa/mac/0.6.10", "native/ecdsa/win/0.6.10"
-    exclude "native/ecdsa/linux/0.8.11", "native/ecdsa/mac/0.8.11", "native/ecdsa/win/0.8.11"
-    exclude "native/sm/linux/0.4.25", "native/sm/mac/0.4.25", "native/sm/win/0.4.25"
-    exclude "native/sm/linux/0.5.2", "native/sm/mac/0.5.2", "native/sm/win/0.5.2"
-    exclude "native/sm/linux/0.6.10", "native/sm/mac/0.6.10", "native/sm/win/0.6.10"
-    exclude "native/sm/linux/0.8.11", "native/sm/mac/0.8.11", "native/sm/win/0.8.11"
-
-    archiveFileName = project.name + '-0.8.26-' + project.version + '.jar';
 }
 
 task jarLinux(type: Jar) {
@@ -236,7 +203,7 @@ task jarLinux(type: Jar) {
         attributes(["Implementation-Timestamp": date,
                     "Git-Branch"              : branch,
                     "Git-Commit"              : commit,
-                    "Solidity-Version"        : "0.4.25, 0.5.2, 0.6.10, 0.8.11, 0.8.26",
+                    "Solidity-Version"        : "0.4.25, 0.5.2, 0.6.10, 0.8.11",
                     "Crypto"                  : "ecdsa, sm",
                     "OS-Name"                 : "linux",
                     "OS-Arch"                 : "x86, arm",
@@ -255,7 +222,7 @@ task jarMac(type: Jar) {
         attributes(["Implementation-Timestamp": date,
                     "Git-Branch"              : branch,
                     "Git-Commit"              : commit,
-                    "Solidity-Version"        : "0.4.25, 0.5.2, 0.6.10, 0.8.11, 0.8.26",
+                    "Solidity-Version"        : "0.4.25, 0.5.2, 0.6.10, 0.8.11",
                     "Crypto"                  : "ecdsa, sm",
                     "OS-Name"                 : "mac",
                     "OS-Arch"                 : "x86, arm",
@@ -274,7 +241,7 @@ task jarWin(type: Jar) {
         attributes(["Implementation-Timestamp": date,
                     "Git-Branch"              : branch,
                     "Git-Commit"              : commit,
-                    "Solidity-Version"        : "0.4.25, 0.5.2, 0.6.10, 0.8.11, 0.8.26",
+                    "Solidity-Version"        : "0.4.25, 0.5.2, 0.6.10, 0.8.11",
                     "Crypto"                  : "ecdsa, sm",
                     "OS-Name"                 : "win",
                     "OS-Arch"                 : "x86",
@@ -453,41 +420,6 @@ publishing {
             version project.version
 
             artifact jar0811
-            artifact sourcesJar
-            artifact javadocJar
-
-            pom {
-                name = 'fisco-bcos'
-                description = 'fisco-bcos solcJ'
-                url = 'http://www.fisco-bcos.org'
-
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'zhangsan'
-                        name = 'zhangsan'
-                        email = 'zhangsan@example.com'
-                    }
-                }
-                scm {
-                    connection = 'https://github.com/FISCO-BCOS/solcJ.git'
-                    url = 'https://github.com/FISCO-BCOS/solcJ.git'
-                }
-            }
-        }
-
-        solc0826(MavenPublication) {
-
-            artifactId project.name + '-0.8.26'
-            groupId project.group
-            version project.version
-
-            artifact jar0826
             artifact sourcesJar
             artifact javadocJar
 

@@ -9,10 +9,6 @@ public class SolidityCompilerVersionTest {
     @SuppressWarnings("static-access")
     @Test
     public void smSolcVersionTest() throws Exception {
-        String versionOutput0 = SolidityCompiler.runGetVersionOutput(true, Version.V0_8_26);
-        Assert.assertTrue(versionOutput0.contains("0.8.26"));
-        Assert.assertTrue(versionOutput0.toLowerCase().contains("gm"));
-
         String versionOutput = SolidityCompiler.runGetVersionOutput(true, Version.V0_8_11);
         Assert.assertTrue(versionOutput.contains("0.8.11"));
         Assert.assertTrue(versionOutput.toLowerCase().contains("gm"));
@@ -32,10 +28,6 @@ public class SolidityCompilerVersionTest {
 
     @Test
     public void ecdsaSolcVersionTest() throws Exception {
-        String versionOutput0 = SolidityCompiler.runGetVersionOutput(false, Version.V0_8_26);
-        Assert.assertTrue(versionOutput0.contains("0.8.26"));
-        Assert.assertFalse(versionOutput0.toLowerCase().contains("gm"));
-
         String versionOutput = SolidityCompiler.runGetVersionOutput(false, Version.V0_8_11);
         Assert.assertTrue(versionOutput.contains("0.8.11"));
         Assert.assertFalse(versionOutput.toLowerCase().contains("gm"));

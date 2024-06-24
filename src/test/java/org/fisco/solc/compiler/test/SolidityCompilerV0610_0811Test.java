@@ -37,15 +37,6 @@ public class SolidityCompilerV0610_0811Test {
         docTest(Version.V0_6_10);
     }
 
-    @Test
-    public void compilerV0826Test() {
-        compileCharitySplitterFactory(false, Version.V0_8_26, true);
-        compileCharitySplitterFactory(false, Version.V0_8_26, false);
-        compileCharitySplitterFactory(true, Version.V0_8_26, true);
-        compileCharitySplitterFactory(true, Version.V0_8_26, false);
-        docTest(Version.V0_6_10);
-    }
-
     private void compileCharitySplitterFactory(boolean sm, Version version, boolean isFile) {
         try {
             URL url =
