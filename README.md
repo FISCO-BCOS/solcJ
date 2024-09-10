@@ -23,19 +23,31 @@
 - `Gradle`
     ```shell
     # 0.4.25 版本
-    compile group: 'org.fisco-bcos', name: 'solcJ', version: '0.4.25.0'
+    compile group: 'org.fisco-bcos', name: 'solcJ-0.4.25', version: '1.0.0'
 
     # 0.5.2 版本
-    compile group: 'org.fisco-bcos', name: 'solcJ', version: '0.5.2.0'
+    compile group: 'org.fisco-bcos', name: 'solcJ-0.5.2', version: '1.0.0'
 
     # 0.6.10 版本
-    compile group: 'org.fisco-bcos', name: 'solcJ', version: '0.6.10.0'
+    compile group: 'org.fisco-bcos', name: 'solcJ-0.6.10', version: '1.0.0'
   
     # 0.8.11 版本
-    compile group: 'org.fisco-bcos', name: 'solcJ', version: '0.8.11.0'
+    compile group: 'org.fisco-bcos', name: 'solcJ-0.8.11', version: '1.0.0'
   
     # 0.8.26 版本
-    compile group  'org.fisco-bcos', name: 'solcJ', version: '0.8.26.0'
+    compile group  'org.fisco-bcos', name: 'solcJ-0.8.26', version: '1.0.0'
+  
+    # Linux专属版本，支持所有solidity版本
+    compile group  'org.fisco-bcos', name: 'solcJ-linux', version: '1.0.0'
+    
+    # macOS专属版本，支持所有solidity版本
+    compile group  'org.fisco-bcos', name: 'solcJ-mac', version: '1.0.0'
+  
+    # Windows专属版本，支持所有solidity版本
+    compile group  'org.fisco-bcos', name: 'solcJ-win', version: '1.0.0'
+  
+    # 所有系统架构通用版本，支持所有solidity版本
+    compile group  'org.fisco-bcos', name: 'solcJ', version: '1.0.0'
     ```
 
 - `Maven`
@@ -43,36 +55,64 @@
   # 0.4.25 版本
   <dependency>
         <groupId>org.fisco-bcos</groupId>
-        <artifactId>solcJ</artifactId>
-        <version>0.4.25.0</version>
+        <artifactId>solcJ-0.4.25</artifactId>
+        <version>1.0.0</version>
     </dependency>
 
   # 0.5.2 版本
   <dependency>
         <groupId>org.fisco-bcos</groupId>
-        <artifactId>solcJ</artifactId>
-        <version>0.5.2.0</version>
+        <artifactId>solcJ-0.5.2</artifactId>
+        <version>1.0.0</version>
     </dependency>
 
    # 0.6.10 版本
     <dependency>
         <groupId>org.fisco-bcos</groupId>
-        <artifactId>solcJ</artifactId>
-        <version>0.6.10.0</version>
+        <artifactId>solcJ-0.6.10</artifactId>
+        <version>1.0.0</version>
     </dependency>
   
     #0.8.11 版本
     <dependency>
         <groupId>org.fisco-bcos</groupId>
-        <artifactId>solcJ</artifactId>
-        <version>0.8.11.0</version>
+        <artifactId>solcJ-0.8.11</artifactId>
+        <version>1.0.0</version>
     </dependency>
     
     #0.8.26 版本
     <dependency>
         <groupId>org.fisco-bcos</groupId>
+        <artifactId>solcJ-0.8.26</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+   
+    # Linux专属版本，支持所有solidity版本
+    <dependency>
+        <groupId>org.fisco-bcos</groupId>
+        <artifactId>solcJ-linux</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+  
+    # macOS专属版本，支持所有solidity版本
+    <dependency>
+        <groupId>org.fisco-bcos</groupId>
+        <artifactId>solcJ-mac</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+  
+    # Windows专属版本，支持所有solidity版本
+    <dependency>
+        <groupId>org.fisco-bcos</groupId>
+        <artifactId>solcJ-win</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+  
+    # 所有系统架构通用版本，支持所有solidity版本
+    <dependency>
+        <groupId>org.fisco-bcos</groupId>
         <artifactId>solcJ</artifactId>
-        <version>0.8.26.0</version>
+        <version>1.0.0</version>
     </dependency>
   ```
   

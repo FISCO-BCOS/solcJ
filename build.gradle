@@ -54,7 +54,7 @@ dependencies {
 
 archivesBaseName = 'solcJ'
 group = 'org.fisco-bcos'
-version = '1.0.0-SNAPSHOT'
+version = '1.0.0'
 
 // Additional attribute definition
 ext {
